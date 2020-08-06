@@ -1,6 +1,9 @@
+using Flunt.Validations;
+using PaymentContext.Shared.ValueObjects;
+
 namespace PaymentContext.Domain.ValueObjects
 {
-    public class Address
+    public class Address : ValueObject
     {
         public Address(string street, string number, string neighborhood, string city, string state, string zipCode)
         {
@@ -10,6 +13,14 @@ namespace PaymentContext.Domain.ValueObjects
             City = city;
             State = state;
             ZipCode = zipCode;
+
+            AddNotifications(
+                new Contract()
+                .Requires()
+                .HasMinLen(Street, 3, "Address.Street", "A Rua deve conter pelo menos 3 caracteres")
+                .HasMinLen(City, 3, "Address.City", "A Cidade deve conter pelo menos 3 caracteres")
+                .HasMinLen(State, 3, "Address.State", "O Estado deve conter pelo menos 3 caracteres")
+            );
         }
 
         public string Street { get; private set; }
